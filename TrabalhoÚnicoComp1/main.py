@@ -1,5 +1,6 @@
 import pygame
 from pygame.locals import *
+import easygui
 # setup básico
 pygame.init()
 screen_width = 1000
@@ -13,11 +14,14 @@ default_image_size = (100, 100)
 ufrj_img = pygame.image.load('assets/UFRJ.png')
 ufrj_img = pygame.transform.scale(ufrj_img, default_image_size)
 
-def calculo1():
+def calculo1(x, y):
     calculo = pygame.image.load('assets/calculo1.png')
     calculo = pygame.transform.scale(calculo, default_image_size)
     rect_calculo = calculo.get_rect()
+    rect_calculo.x = x
+    rect_calculo.y = y
     screen.blit(calculo, rect_calculo)
+    return rect_calculo
 
 class Player():
     #controi o objeto do player
@@ -52,6 +56,9 @@ class Player():
         if self.vel_y > 30:
             self.vel_y = 30
         movey += self.vel_y
+#colisão player-calculo1
+        if player.rect.colliderect(calculo1_rect):
+            easygui.ynbox('Qual a derivada de 8x²?', 'Title', ('16x', '16'))
 #colisão
         self.is_jumping = True
         for tile in world.tile_list:
@@ -146,6 +153,7 @@ player = Player(100, screen_height - 130)
 world = World(world_data)
 white = (255, 255, 255)
 running = True
+calculo1_rect = calculo1(450, 0)  # Exemplo de posição para o objeto calculo1
 while running:
     #clock determina o "fps" do jogo -- NAO TIRAR!!! DANDO MUITO PROBLEMA -- entender melhor depois
     clock = pygame.time.Clock()
@@ -154,7 +162,8 @@ while running:
     world.draw()
     player.update()
     screen.blit(ufrj_img, (880, 10))
-    calculo1()
+
+    calculo1_rect = calculo1(450, 50)  # Atualizando a posição do retângulo do objeto calculo1
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
