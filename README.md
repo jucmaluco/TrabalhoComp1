@@ -6,4 +6,5 @@ Realizado pelo aluno Jõao Antonio Guarnieri.
 
 # Sobre o Jogo
 
-O jogo é um plataformer simples, com comandos clássicos WASD. Foi realizado inteiramente utilizando Python e a biblioteca Pygame (www.pygame.org). 
+O jogo é um plataformer simples, com comandos clássicos WASD. Foi realizado utilizando Python e a biblioteca Pygame (www.pygame.org). Além disso, para interação com o usuário por meio de perguntas e atividades por fora da interface do jogo, fui utilizada a biblioteca EasyGUI (https://easygui.sourceforge.net/)
+
