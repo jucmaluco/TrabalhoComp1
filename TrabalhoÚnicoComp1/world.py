@@ -1,7 +1,7 @@
 import pygame
 from pygame.locals import *
 import easygui
-from var import screen_height, screen_width, default_image_size, small_image_size, TILE_SIZE, world_data, credito_world_data
+from var import screen_height, screen_width, default_image_size, small_image_size, TILE_SIZE, world_data, credito_world_data, matrix_dict, world_data2
 
 #aplicando o world data (em baixo) no grid do jogo
 class World():
