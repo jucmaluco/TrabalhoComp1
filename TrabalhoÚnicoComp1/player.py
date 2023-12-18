@@ -1,10 +1,12 @@
 import pygame
 from pygame.locals import *
 import easygui
-from var import screen_height, screen_width, default_image_size, small_image_size, TILE_SIZE, world_data, credito_world_data
+from var import screen_height, screen_width, default_image_size, small_image_size, TILE_SIZE, world_data, credito_world_data, matrix_dict
+import json
+
 class Player():
     #controi o objeto do player
-    def __init__(self, x, y):
+    def __init__(self, x, y, game_state):
         img = pygame.image.load('assets/Player.png')
         self.image = pygame.transform.scale(img, (60, 60))
         self.rect = self.image.get_rect()
@@ -14,8 +16,8 @@ class Player():
         self.height = self.image.get_height()
         self.vel_y = 0
         self.jumping = False
-    def update(self, calculo1_rect, world, creditoWorld, screen):
-        global game_state
+        self.game_state = game_state
+    def update(self, calculo1_rect, world, creditoWorld, screen, game_state, calculo2_rect):
         movex = 0
         movey = 0
         credito_counter = 0
@@ -41,12 +43,20 @@ class Player():
             output = easygui.ynbox('Qual a derivada de 8x²?', 'Title', ('16x', '16'))
             if output:
                 easygui.msgbox("Boa!", "acertou")
+                self.game_state = "running2"
             else:
                 easygui.msgbox("Tente novamente!", "errou")
             self.rect.x = 100
             self.rect.y = screen_height - 130
-            global game_state
-            game_state = "running2"
+        if self.rect.colliderect(calculo2_rect):
+            output = easygui.ynbox('Qual a integral de 2x?', 'Title', ('x²', 'x/2'))
+            if output:
+                easygui.msgbox("Boa!", "acertou")
+                self.game_state = "running3"
+            else:
+                easygui.msgbox("Tente novamente!", "errou")
+            self.rect.x = 100
+            self.rect.y = screen_height - 130
         #colisão player-mundo
         self.is_jumping = True
         for tile in world.tile_list:
@@ -83,3 +93,5 @@ class Player():
             self.rect.left = 0
             movex = 0
         screen.blit(self.image, self.rect)
+        return self.game_state
+
