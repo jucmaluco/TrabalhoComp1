@@ -5,6 +5,7 @@ from player import Player
 from world import World
 from creditoworld import CreditoWorld
 from var import screen_height, screen_width, default_image_size, small_image_size, TILE_SIZE, world_data, credito_world_data, matrix_dict, world_data2, world_data3
+import json
 # setup básico
 pygame.init()
 screen = pygame.display.set_mode((screen_width, screen_height))
@@ -16,8 +17,27 @@ ufrj_img = pygame.transform.scale(ufrj_img, default_image_size)
 
 global game_state
 game_state = "running"
+def carregar_nome():
+    try:
+        with open('nome_jogador.json', 'r') as arquivo:
+            dados = json.load(arquivo)
+            return dados.get("nome", "")
+    except (FileNotFoundError, json.decoder.JSONDecodeError):
+        return ""
 
-#calculo1
+def salvar_nome(nome):
+    with open('nome_jogador.json', 'w') as arquivo:
+        json.dump({"nome": nome}, arquivo)
+
+def exibir_nome_do_jogador():
+    nome_do_jogador = carregar_nome() if carregar_nome() else "Sem nome"
+    easygui.msgbox(f"Bem vindo ao jogo, {nome_do_jogador}", title="Informação do Jogador")
+
+def renomear_jogador():
+    novo_nome = easygui.enterbox("Digite seu nome:", title="Nome do Jogador", default=carregar_nome())
+    if novo_nome:
+        salvar_nome(novo_nome)
+
 def calculo1(x, y):
     calculo = pygame.image.load('assets/calculo1.png')
     calculo = pygame.transform.scale(calculo, default_image_size)
@@ -36,23 +56,6 @@ def calculo2(x, y):
     screen.blit(calculo2, rect_calculo2)
     return rect_calculo2
 
-def renomear(x, y):
-    nome_img = pygame.image.load('assets/nome_img.png')
-    nome_img = pygame.transform.scale(nome_img, default_image_size)
-    rect_nome_img = nome_img.get_rect()
-    rect_nome_img.x = x
-    rect_nome_img.y = y
-    screen.blit(nome_img, rect_nome_img)
-    return rect_nome_img
-
-#dividindo a tela em "tiles" para montar o mundo
-def draw_grid():
-	for line in range(0, 20):
-		pygame.draw.line(screen, (0, 0, 255), (0, line * TILE_SIZE), (screen_width, line * TILE_SIZE))
-		pygame.draw.line(screen, (0, 0, 255), (line * TILE_SIZE, 0), (line * TILE_SIZE, screen_height))
-
-
-
 player = Player(100, screen_height - 130, game_state)
 world = World(world_data)
 world2 = World(world_data2)
@@ -63,7 +66,9 @@ black = (0,0,0)
 running = True
 calculo1_rect = calculo1(450, 0)
 calculo2_rect = calculo2(550, 0)
-nome_img_rect = renomear(440, screen_height - 130)
+
+exibir_nome_do_jogador()
+renomear_jogador()
 
 while running:
     for event in pygame.event.get():
@@ -80,7 +85,6 @@ while running:
         game_state = player.update(calculo1_rect, world, creditoWorld, screen, game_state, calculo2_rect)
         screen.blit(ufrj_img, (880, 10))
         calculo1_rect = calculo1(450, 50)  # Atualizando a posição do retângulo do objeto calculo1
-        nome_img_rect = renomear(650, screen_height - 360)
         pygame.display.update()
 
     elif game_state == "running2":
