@@ -4,7 +4,7 @@ import easygui
 from player import Player
 from world import World
 from creditoworld import CreditoWorld
-from var import screen_height, screen_width, default_image_size, small_image_size, TILE_SIZE, world_data, credito_world_data
+from var import screen_height, screen_width, default_image_size, small_image_size, TILE_SIZE, world_data, credito_world_data, matrix_dict, world_data2, world_data3
 # setup básico
 pygame.init()
 screen = pygame.display.set_mode((screen_width, screen_height))
@@ -27,6 +27,23 @@ def calculo1(x, y):
     screen.blit(calculo, rect_calculo)
     return rect_calculo
 
+def calculo2(x, y):
+    calculo2 = pygame.image.load('assets/calculo2.png')
+    calculo2 = pygame.transform.scale(calculo2, default_image_size)
+    rect_calculo2 = calculo2.get_rect()
+    rect_calculo2.x = x
+    rect_calculo2.y = y
+    screen.blit(calculo2, rect_calculo2)
+    return rect_calculo2
+
+def renomear(x, y):
+    nome_img = pygame.image.load('assets/nome_img.png')
+    nome_img = pygame.transform.scale(nome_img, default_image_size)
+    rect_nome_img = nome_img.get_rect()
+    rect_nome_img.x = x
+    rect_nome_img.y = y
+    screen.blit(nome_img, rect_nome_img)
+    return rect_nome_img
 
 #dividindo a tela em "tiles" para montar o mundo
 def draw_grid():
@@ -36,17 +53,19 @@ def draw_grid():
 
 
 
-player = Player(100, screen_height - 130)
+player = Player(100, screen_height - 130, game_state)
 world = World(world_data)
+world2 = World(world_data2)
+world3 = World(world_data3)
 creditoWorld = CreditoWorld(credito_world_data)
 white = (255, 255, 255)
 black = (0,0,0)
 running = True
 calculo1_rect = calculo1(450, 0)
-
+calculo2_rect = calculo2(550, 0)
+nome_img_rect = renomear(440, screen_height - 130)
 
 while running:
-
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
@@ -58,22 +77,30 @@ while running:
         screen.fill(white)
         world.draw(screen)
         creditoWorld.draw(screen)
-        player.update(calculo1_rect, world, creditoWorld, screen)
+        game_state = player.update(calculo1_rect, world, creditoWorld, screen, game_state, calculo2_rect)
         screen.blit(ufrj_img, (880, 10))
         calculo1_rect = calculo1(450, 50)  # Atualizando a posição do retângulo do objeto calculo1
+        nome_img_rect = renomear(650, screen_height - 360)
         pygame.display.update()
 
     elif game_state == "running2":
         # clock determina o "fps" do jogo -- NAO TIRAR!!! DANDO MUITO PROBLEMA -- entender melhor depois
         clock = pygame.time.Clock()
         clock.tick(100)
-        screen.fill(black)
-        player.update(calculo1_rect, world, creditoWorld, screen)
+        screen.fill(white)
+        world2.draw(screen)
+        creditoWorld.draw(screen)
+        game_state = player.update(calculo2_rect, world2, creditoWorld, screen, game_state, calculo1_rect)
         screen.blit(ufrj_img, (880, 10))
+        calculo2_rect = calculo2(550, 50)  # Atualizando a posição do retângulo do objeto calculo1
         pygame.display.update()
 
-    elif game_state == "main_menu":
-        menu_screen.fill(white)
-        menu_screen.blit(ufrj_img, (880, 10))
+    elif game_state == "running3":
+        clock = pygame.time.Clock()
+        clock.tick(100)
+        screen.fill(white)
+        world3.draw(screen)
         pygame.display.update()
+
+
 pygame.quit()
