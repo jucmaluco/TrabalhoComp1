@@ -4,7 +4,7 @@ import easygui
 from player import Player
 from world import World
 from creditoworld import CreditoWorld
-from var import screen_height, screen_width, default_image_size, small_image_size, TILE_SIZE, world_data, credito_world_data, matrix_dict, world_data2, world_data3
+from var import screen_height, screen_width, default_image_size, small_image_size, TILE_SIZE, world_data, credito_world_data, matrix_dict, world_data2, world_data3, credito_world_data2
 import json
 # setup básico
 pygame.init()
@@ -62,11 +62,12 @@ world = World(matrix_dict["world_data"])
 world2 = World(matrix_dict["world_data2"])
 world3 = World(matrix_dict['world_data3'])
 creditoWorld = CreditoWorld(credito_world_data)
+creditoWorld2 = CreditoWorld(credito_world_data2)
 white = (255, 255, 255)
 black = (0,0,0)
 running = True
 calculo1_rect = calculo1(450, 0)
-calculo2_rect = calculo2(550, 0)
+calculo2_rect = calculo2(450, 0)
 
 exibir_nome_do_jogador()
 renomear_jogador()
@@ -85,6 +86,7 @@ while running:
         game_state = player.update(calculo1_rect, world, creditoWorld, screen, game_state, calculo2_rect)
         screen.blit(ufrj_img, (880, 10))
         calculo1_rect = calculo1(450, 50)  # Atualizando a posição do retângulo do objeto calculo1
+        creditoWorld.draw(screen)
         pygame.display.update()
 
     elif game_state == "running2":
@@ -95,7 +97,8 @@ while running:
         world2.draw(screen)
         game_state = player.update(calculo2_rect, world2, creditoWorld, screen, game_state, calculo1_rect)
         screen.blit(ufrj_img, (880, 10))
-        calculo2_rect = calculo2(550, 50)  # Atualizando a posição do retângulo do objeto calculo1
+        calculo2_rect = calculo2(500, 50)  # Atualizando a posição do retângulo do objeto calculo1
+        creditoWorld2.draw(screen)
         pygame.display.update()
 
     elif game_state == "running3":
