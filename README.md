@@ -12,4 +12,4 @@ Todos sprites utilizados no jogo são originais, de criação própria utilizand
 
 # Utilização
 
-Para rodar o jogo, basta a utilização dos arquivos acima e a instalação (utilizando pip install) das bibliotecas pygame e easygui.
+Para rodar o jogo, basta a utilização dos arquivos acima e a instalação (utilizando pip install) das bibliotecas pygame e easygui. Após instalação, basta rodar o arquivo main.py.
