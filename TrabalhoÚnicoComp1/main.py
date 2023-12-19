@@ -23,6 +23,7 @@ def carregar_nome():
             dados = json.load(arquivo)
             return dados.get("nome", "")
     except (FileNotFoundError, json.decoder.JSONDecodeError):
+        print("Terminal: Usuário não criado")
         return ""
 
 def salvar_nome(nome):
@@ -57,9 +58,9 @@ def calculo2(x, y):
     return rect_calculo2
 
 player = Player(100, screen_height - 130, game_state)
-world = World(world_data)
-world2 = World(world_data2)
-world3 = World(world_data3)
+world = World(matrix_dict["world_data"])
+world2 = World(matrix_dict["world_data2"])
+world3 = World(matrix_dict['world_data3'])
 creditoWorld = CreditoWorld(credito_world_data)
 white = (255, 255, 255)
 black = (0,0,0)
@@ -81,7 +82,6 @@ while running:
         clock.tick(100)
         screen.fill(white)
         world.draw(screen)
-        creditoWorld.draw(screen)
         game_state = player.update(calculo1_rect, world, creditoWorld, screen, game_state, calculo2_rect)
         screen.blit(ufrj_img, (880, 10))
         calculo1_rect = calculo1(450, 50)  # Atualizando a posição do retângulo do objeto calculo1
@@ -93,7 +93,6 @@ while running:
         clock.tick(100)
         screen.fill(white)
         world2.draw(screen)
-        creditoWorld.draw(screen)
         game_state = player.update(calculo2_rect, world2, creditoWorld, screen, game_state, calculo1_rect)
         screen.blit(ufrj_img, (880, 10))
         calculo2_rect = calculo2(550, 50)  # Atualizando a posição do retângulo do objeto calculo1
